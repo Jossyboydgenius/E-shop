@@ -2,5 +2,15 @@
     display: flex;
     justify-content: space-around;
     padding: 16px;
-    box-shadow: 0 1px 3px 2px black;
+    box-shadow: 0 1px 3px -2px black;
+}
+.nav-logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-logo p{
+    color: #171717;
+    font-size: 38px;
+    font-weight: 600;
 }
