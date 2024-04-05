@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
-    "json": "^11.0.0"
+    "json": "^11.0.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }
