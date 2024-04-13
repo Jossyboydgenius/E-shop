@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 // Database Connection With MongoDB
+
 mongoose.connect(
   "mongodb+srv://awejosepholaitan:<password>@cluster0.f6bvl6g.mongodb.net/e-commerce"
 );
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 // Image Storage Engine
+
 const storage = multer.diskStorage({
   destination: "./upload/images",
   filename: (req, file, cb) => {
@@ -35,6 +37,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Creating Upload Endpoint for Images
+
 app.use("/images", express.static("upload/images"));
 app.post("/upload", upload.single("product"), (req, res) => {
   res.json({
@@ -80,9 +83,18 @@ const Product = mongoose.model("products", {
   },
 });
 
-app.post('/addproduct', async (req, res) => {
+app.post("/addproduct", async (req, res) => {
+  let products = await Product.find({});
+  let id;
+  if (products.length > 0) {
+    let last_product_array = products.slice(-1);
+    let last_product = last_product_array[0];
+    id = last_product.id + 1;
+  } else {
+    id = 1;
+  }
   const product = new Product({
-    id: req.body.id,
+    id: id,
     name: req.body.name,
     image: req.body.image,
     category: req.body.category,
@@ -95,8 +107,27 @@ app.post('/addproduct', async (req, res) => {
   res.json({
     sucess: true,
     name: req.body.name,
-  })
+  });
 });
+
+// Creating API for Deleting Products
+
+app.post("/removeproduct", async (req, res) => {
+  await Product.findOneAndDelete({ id: req.body.id });
+  console.log("Removed");
+  res.json({
+    sucess: true,
+    name: req.body.name,
+  });
+});
+
+//Creating API for Getting All Products
+
+app.get('/allproducts', async (req, res) => {
+    let products = await Product.find({});
+    console.log("All Products Fetched");
+    res.send(products);
+})
 
 app.listen(port, (error) => {
   if (!error) {
