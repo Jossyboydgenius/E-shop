@@ -1,5 +1,5 @@
-// import React from 'react'
-import './AddProduct.css'
+import React from 'react';
+import './AddProduct.css';
 
 const AddProduct = () => {
     return (
@@ -18,8 +18,16 @@ const AddProduct = () => {
                     <input type="text" name='new_price' placeholder='Type here' />
                 </div>
             </div>
+            <div className="addproduct-itemfield">
+                <p>Product Category</p>
+                <select name="category" className='add-product-selector'>
+                    <option value="women">Women</option>
+                    <option value="en">Men</option>
+                    <option value="kid">Kid</option>
+                </select>
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default AddProduct
+export default AddProduct;
