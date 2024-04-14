@@ -22,7 +22,7 @@ const AddProduct = () => {
                 <p>Product Category</p>
                 <select name="category" className='add-product-selector'>
                     <option value="women">Women</option>
-                    <option value="en">Men</option>
+                    <option value="men">Men</option>
                     <option value="kid">Kid</option>
                 </select>
             </div>
