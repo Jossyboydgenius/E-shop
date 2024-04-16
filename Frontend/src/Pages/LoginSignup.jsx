@@ -35,7 +35,7 @@ const LoginSignup = () => {
       localStorage.setItem('auth-token', responseData.token);
       window.location.replace("/");
     }
-    else{
+    else {
       alert(responseData.errors);
     }
   }
