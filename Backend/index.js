@@ -14,7 +14,7 @@ app.use(cors());
 // Database Connection With MongoDB
 
 mongoose.connect(
-  "mongodb+srv://awejosepholaitan:<password>@cluster0.f6bvl6g.mongodb.net/e-commerce"
+  "mongodb+srv://awejosepholaitan:kissjosh455@cluster0.f6bvl6g.mongodb.net/e-commerce"
 );
 
 // API Creation
@@ -42,7 +42,7 @@ const upload = multer({ storage: storage });
 app.use("/images", express.static("upload/images"));
 app.post("/upload", upload.single("product"), (req, res) => {
   res.json({
-    sucess: 1,
+    success: 1,
     image_url: `http://localhost:${port}/images/${req.file.filename}`,
   });
 });
@@ -106,7 +106,7 @@ app.post("/addproduct", async (req, res) => {
   await product.save();
   console.log("Saved");
   res.json({
-    sucess: true,
+    success: true,
     name: req.body.name,
   });
 });
@@ -117,7 +117,7 @@ app.post("/removeproduct", async (req, res) => {
   await Product.findOneAndDelete({ id: req.body.id });
   console.log("Removed");
   res.json({
-    sucess: true,
+    success: true,
     name: req.body.name,
   });
 });
@@ -160,7 +160,7 @@ app.post("/singup", async (req, res) => {
     return res
       .status(400)
       .json({
-        sucess: false,
+        success: false,
         errors: "Existing user found with same email address",
       });
   }
