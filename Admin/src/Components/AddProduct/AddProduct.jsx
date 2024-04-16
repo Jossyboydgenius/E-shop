@@ -37,12 +37,17 @@ const AddProduct = () => {
                 Accept: 'application/json',
             },
             body: formData,
-        }).then((resp) => resp.json()).then((data) => { responseData = data })
+        })
+            .then((resp) => resp.json())
+            .then((data) => { responseData = data })
+            .catch((error) => {
+                console.error('Error uploading image:', error);
+                // Handle the error here, such as showing an error message to the user
+            });
 
         console.log('Response data after upload:', responseData); // Check the response data after upload
 
-        if (responseData.success) 
-         {
+        if (responseData.success) {
             product.image = responseData.image_url;
             console.log(product);
             console.log('Product after setting image:', product); // Check the product after setting image
@@ -50,14 +55,21 @@ const AddProduct = () => {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
-                    'Content-Type': 'application/json', 
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(product),
-            }).then((resp) => resp.json()).then((data) => {
-                data.success ? alert("Product Added") : alert("Failed")
             })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    console.log("Data from server:", data); // Verify the value of data.success
+                    data.success ? alert("Product Added") : alert("Failed");
+                })
+                .catch((error) => {
+                    console.error('Error adding product:', error);
+                    // Handle the error here, such as showing an error message to the user
+                });
         }
-    }
+    };
 
     return (
         <div className='add-product'>
