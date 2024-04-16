@@ -1,62 +1,76 @@
-import React, { useEffect, useState } from 'react'
-import './ListProduct.css'
-import cross_icon from '../../assets/cart_cross_icon.png'
+import React, { useEffect, useState } from 'react';
+import './ListProduct.css';
+import cross_icon from '../../assets/cart_cross_icon.png';
 
 const ListProduct = () => {
-
     const [allproducts, setAllProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchInfo = async () => {
-        await fetch('http://localhost:4000/allproducts')
-            .then((res) => res.json())
-            .then((data) => { setAllProducts(data) });
-    }
+        try {
+            const response = await fetch('http://localhost:4000/allproducts');
+            if (!response.ok) {
+                throw new Error('Failed to fetch product data');
+            }
+            const data = await response.json();
+            setAllProducts(data);
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchInfo();
-    }, [])
+    }, []);
 
-    const remove_product = async(id)=>{
-        await fetch('http://localhost:4000/removeproduct', {
-            method: 'POST',
-            headers:{
-                Accept:'application/json',
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({id:id})
-        })
-        await fetchInfo();
-    }
+    const removeProduct = async (id) => {
+        try {
+            await fetch('http://localhost:4000/removeproduct', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id }),
+            });
+            // Reload product list after removing
+            await fetchInfo();
+        } catch (error) {
+            console.error('Error removing product:', error);
+        }
+    };
 
     return (
         <div className='list-product'>
-            <h1>All Product List</h1>
+            <h1>All Product Lists</h1>
             <div className="listproduct-format-main">
-                <p>Products</p>
-                <p>Title</p>
-                <p>Old Price</p>
-                <p>New Price</p>
-                <p>Category</p>
-                <p>Remove</p>
+                <div>Products</div>
+                <div>Title</div>
+                <div>Old Price</div>
+                <div>New Price</div>
+                <div>Category</div>
+                <div>Remove</div>
             </div>
-            <div className="listproduct-allproducts">
-                <hr />
-                {allproducts.map((product, index) => {
-                    return <>
-                        <div key={index} className="listproduct-format-main listproduct-format">
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <div className="listproduct-allproducts">
+                    {allproducts.map((product) => (
+                        <div key={product.id} className="listproduct-format-main listproduct-format">
                             <img src={product.image} alt="" className="listproduct-product-icon" />
-                            <p>{product.name}</p>
-                            <p>${product.old_price}</p>
-                            <p>${product.new_price}</p>
-                            <p>{product.category}</p>
-                            <img onClick={()=>{remove_product(product.id)}} className='listproduct-remove-icon' src={cross_icon} alt="" />
+                            <div>{product.name}</div>
+                            <div>${product.old_price}</div>
+                            <div>${product.new_price}</div>
+                            <div>{product.category}</div>
+                            <img onClick={() => removeProduct(product.id)} className='listproduct-remove-icon' src={cross_icon} alt="" />
                         </div>
-                        <hr />
-                    </>
-                })}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default ListProduct
+export default ListProduct;
