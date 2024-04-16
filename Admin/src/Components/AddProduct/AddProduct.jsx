@@ -25,28 +25,36 @@ const AddProduct = () => {
         let responseData;
         let product = productDetails;
 
+        console.log('Image before upload:', image); // Check the image before upload
+
+
         let formData = new FormData();
         formData.append('product', image);
 
         await fetch('http://localhost:4000/upload', {
             method: 'POST',
             headers: {
-                Accept: 'application/json'
+                Accept: 'application/json',
             },
             body: formData,
         }).then((resp) => resp.json()).then((data) => { responseData = data })
-        if (responseData.success) {
+
+        console.log('Response data after upload:', responseData); // Check the response data after upload
+
+        if (responseData.success) 
+         {
             product.image = responseData.image_url;
             console.log(product);
+            console.log('Product after setting image:', product); // Check the product after setting image
             await fetch('http://localhost:4000/addproduct', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
-                    'Content-Type':  'appplication/json',
+                    'Content-Type': 'application/json', 
                 },
                 body: JSON.stringify(product),
-            }).then((resp)=>resp.json()).then((data)=>{
-                data.success?alert("Product Added"): alert("Failed")
+            }).then((resp) => resp.json()).then((data) => {
+                data.success ? alert("Product Added") : alert("Failed")
             })
         }
     }
