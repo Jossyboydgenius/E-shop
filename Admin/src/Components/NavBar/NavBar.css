@@ -1,4 +1,4 @@
-.navbar {
+.Navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -8,20 +8,20 @@
     background: white;
 }
 
-.navbar_logo {
+.Navbar_logo {
     width: 200px;
 }
 
-.navbar-profile {
+.Navbar-profile {
     width: 75px;
 }
 
 @media(max-width: 800px) {
-    .navbar {
+    .Navbar {
         padding: 15px 30px;
     }
 
-    .navbar_logo {
+    .Navbar_logo {
         width: 150px;
     }
 }
