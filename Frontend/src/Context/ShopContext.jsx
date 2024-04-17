@@ -19,11 +19,23 @@ const ShopContextProvider = (props) => {
         fetch('http://localhost:4000/allproducts')
             .then((response) => response.json())
             .then((data) => setAll_Product(data))
-    },[])
+    }, [])
 
     const addToCart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-        console.log(cartItems);
+        if (localStorage.getItem('auth-token')) {
+            fetch('http://localhost:4000/addtocart', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
+                },
+                body: JSON.stringify({ "itemId": itemId })
+            })
+                .then((response) => response.json())
+                .then((data) => console.log(data));
+        }
     }
 
     const removeFromCart = (itemId) => {
@@ -42,10 +54,8 @@ const ShopContextProvider = (props) => {
     }
     const getTotalCartItems = () => {
         let totalItem = 0;
-        for (const item in cartItems) 
-        {
-            if (cartItems[item] > 0) 
-            {
+        for (const item in cartItems) {
+            if (cartItems[item] > 0) {
                 totalItem += cartItems[item];
             }
         }
