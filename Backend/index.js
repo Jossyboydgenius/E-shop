@@ -227,7 +227,7 @@ app.get("/popularinwomen", async (req, res) => {
 });
 
 // Creating Middelware to Fetch User
-const fetchuser = async (req, res, next) => {
+const fetchUser = async (req, res, next) => {
   const token = req.header("auth-token");
   if (!token) {
     res.status(401).send({ error: "Please Authenticate using a valid token" });
@@ -246,7 +246,7 @@ const fetchuser = async (req, res, next) => {
 
 // Creating Endpoint for Adding Products in Cart Data
 
-app.post("/addtocart", fetchuser, async (req, res) => {
+app.post("/addtocart", fetchUser, async (req, res) => {
   console.log("Added", req.body.itemId);
   let userData = await Users.findOne({ _id: req.user.id });
   userData.cartData[req.body.itemId] += 1;
@@ -259,7 +259,7 @@ app.post("/addtocart", fetchuser, async (req, res) => {
 
 // Creating Endpoint for Removing Products from Cart Data
 
-app.post("/removefromcart", fetchuser, async (req, res) => {
+app.post("/removefromcart", fetchUser, async (req, res) => {
   console.log("Removed", req.body.itemId);
   let userData = await Users.findOne({ _id: req.user.id });
   if (userData.cartData[req.body.itemId] > 0)
@@ -269,6 +269,14 @@ app.post("/removefromcart", fetchuser, async (req, res) => {
     { cartData: userData.cartData }
   );
   res.send("Removed from Cart");
+});
+
+// Creating Endpoint for Getting Cart Data
+
+app.post('/getcart', fetchUser, async (req, res) => {
+  console.log("Get Cart");
+  let userData = await Users.findOne({ _id: req.user.id });
+  res.json(userData.cartData);
 });
 
 app.listen(port, (error) => {
